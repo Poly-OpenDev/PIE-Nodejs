@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html id="editor-container">
+  <head>
+	<!-- later referance https://stackoverflow.com/questions/16504816/how-to-set-html-content-into-an-iframe -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>PIE - Prism Intergrated Editor</title>
+    <link id="appearence" href="css/editor/dark.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.21.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  </head>
+  <body class="line-numbers">
+  <header data-plugin-header="line-numbers"></header>
+  <div id="bar" class="shadow--1dp">
+    <center>
+      <button onclick="preview()" id="play" class="tab-active"><i data-feather="play"></i></button>
+      <button onclick="editor()" id="code"><i data-feather="code"></i></button>
+      <button id="dark" onclick="tolight()"><i data-feather="moon"></i></button>
+      <button id="light" onclick="todark()"><i data-feather="sun"></i></button>
+    </center>
+  </div>
+  <!-- editable code block is below -->
+<pre id="codeeditor" class="no-outline line-numbers shadow--2dp"data-start="1"><code class="language-markdown editor no-outline" id="container" contenteditable="plaintext-only">[//]: # (Edit what you want but not this line. Create your own markdown prototype if you really want to.)
+# welcome
+## about
+This is the Prism.js Integrated Editor 2.00.011.
+### Updates 
+#### 2.00.011
+ - added a new UI layout.
+ - added light and dark themes
+ - added mobile responsiveness
+ - added line numbers
+
+#### current feedback
+ -  support for drag and drop images.
+
+## Modules
+ - Marked.JS to render markdown
+ - Prism.js to highlight syntax
+ - feather icons for well... icons.
+
+## Details
+PIE, obviously, uses a dark theme whilst the editor uses the "Tomorrow" theme.
+In PIE you can use **all** markdown syntaxes. It is pretty neat too.
+
+It does not use _ace_ or _monaco_ to edit the code... Just an editable div. OwO
+
+And you get this template too
+~~that really just tells you what this is~~ !
+
+It is also friendly to low speed browsers. This is because it does not update the html until you want to preview it, not as you type.
+
+If you find any bugs. **please tell me :)**
+
+btw, click the `<>` button to start editing.
+
+</code></pre>
+  <iframe id="preview" class="shadow--2dp" style="border: none;"></iframe>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.21.0/prism.min.js" integrity="sha512-WkVkkoB31AoI9DAk6SEEEyacH9etQXKUov4JRRuM1Y681VsTq7jYgrRw06cbP6Io7kPsKx+tLFpH/HXZSZ2YEQ==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.21.0/plugins/autoloader/prism-autoloader.min.js" integrity="sha512-ROhjG07IRaPZsryG77+MVyx3ZT5q3sGEGENoGItwc9xgvx+dl+s3D8Ob1zPdbl/iKklMKp7uFemLJFDRw0bvig==" crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.21.0/plugins/line-numbers/prism-line-numbers.min.js" integrity="sha512-1oLZvExT5RaW4q2GgvRPf+XzVVGmsKirfZBRN7aifdOpvZ1L9idEncfMFlfHiQNGBA+Sev+alscSAT/xQ0rwXA==" crossorigin="anonymous"></script>
+  <script>
+      window.scrollTo(0, 0);
+      function saveCaretPosition(context){
+          var selection = window.getSelection();
+          var range = selection.getRangeAt(0);
+          range.setStart(  context, 0 );
+          var len = range.toString().length;
+
+          return function restore(){
+              var pos = getTextNodeAtPosition(context, len);
+              selection.removeAllRanges();
+              var range = new Range();
+              range.setStart(pos.node ,pos.position);
+              selection.addRange(range);
+
+          }
+      }
+
+      function getTextNodeAtPosition(root, index){
+          const NODE_TYPE = NodeFilter.SHOW_TEXT;
+          var treeWalker = document.createTreeWalker(root, NODE_TYPE, function next(elem) {
+              if(index > elem.textContent.length){
+                  index -= elem.textContent.length;
+                  return NodeFilter.FILTER_REJECT
+              }
+              return NodeFilter.FILTER_ACCEPT;
+          });
+          var c = treeWalker.nextNode();
+          return {
+              node: c? c: root,
+              position: index
+          };
+      }
+      var code = document.getElementsByTagName('code')[0];
+      
+      code.addEventListener('input',function () {
+            var restore = saveCaretPosition(this);
+            Prism.highlightElement(this);
+            restore();
+        })
+      
+      function editor(){
+        document.getElementById("code").classList.add('tab-active');
+        document.getElementById("play").classList.remove('tab-active');
+        document.getElementById("codeeditor").style.display = "inline-block"
+        document.getElementById("preview").style.display = "none"
+      }
+
+      function preview(){
+        document.getElementById("play").classList.add('tab-active');
+        document.getElementById("code").classList.remove('tab-active');
+        document.getElementById("codeeditor").style.display = "none"
+        document.getElementById("preview").style.display = "inline-block"
+        var markdn = document.getElementById('codeeditor').innerText
+        console.info("[Markup.JS] Setting up preview")
+        content = marked(markdn) + "<style>html{}</style>"
+        document.getElementById('preview').contentWindow.document.body.innerHTML = content;
+        resizeIFrameToFitContent()
+        console.info("[Markup.JS] Preview rendered")
+      }
+      todark()
+      function tolight(){
+        document.getElementById("light").style.display = "inline-block"
+        document.getElementById("dark").style.display = "none"
+        document.getElementById("appearence").href = "css/editor/light.css"
+
+      }
+
+      function todark(){
+        document.getElementById("dark").style.display = "inline-block"
+        document.getElementById("light").style.display = "none"
+        document.getElementById("appearence").href = "css/editor/dark.css"
+      }
+
+      document.getElementById("codeeditor").style.display = "none"
+      document.getElementById("light").style.display = "none"
+      preview()
+
+
+      function resizeIFrameToFitContent() {
+          document.getElementById("preview").style.height = document.getElementById("preview").contentWindow.document.body.scrollHeight + 'px'; 
+      }
+
+      </script>
+  <script>feather.replace()</script>
+  </body>
+</html>
