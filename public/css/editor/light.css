@@ -274,7 +274,7 @@ button:active {
 	width: 8px;
 }
 ::-webkit-scrollbar-track {
-	background: rgba(0, 0, 0, 0);
+	background: rgba(0, 0, 0, 0) !important;
 	padding:2px;
 }
 ::-webkit-scrollbar-thumb {
@@ -283,7 +283,7 @@ button:active {
 }
 
 ::-webkit-scrollbar-corner {
-  background: rgba(0,0,0,0);
+  background: rgba(0,0,0,0) !important;
 }
 
 /* Handle on hover */

@@ -97,10 +97,10 @@ btw, click the `<>` button to start editing.
       var code = document.getElementsByTagName('code')[0];
       
       code.addEventListener('input',function () {
-            var restore = saveCaretPosition(this);
-            Prism.highlightElement(this);
-            restore();
-        })
+        var restore = saveCaretPosition(this);
+        Prism.highlightElement(this);
+        restore();
+      })
       
       function editor(){
         document.getElementById("code").classList.add('tab-active');

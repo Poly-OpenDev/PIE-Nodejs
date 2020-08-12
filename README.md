@@ -10,3 +10,8 @@ you need node and yarn (or npx) for this.
  4. enter `cd "file-path-to-folder"`
  5. enter `npm install && npm start`
  6. your server should now run.
+
+or just go to https://repl.it and signup then you can
+[Fork it on repl.it](https://repl.it/@FoxgloveDev/PIE-Nodejs) by clicking the fork button.
+You can then just run it.
+
