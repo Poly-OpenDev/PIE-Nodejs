@@ -1,6 +1,6 @@
 ---
 name: Feature Request or Enhancement
-about: Describe this issue template's purpose here.
+about: Use this if you wan us to add something new.
 title: Feature/Enhancement request
 labels: ''
 assignees: ''
