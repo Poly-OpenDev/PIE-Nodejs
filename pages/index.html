@@ -22,7 +22,7 @@
     </center>
   </div>
   <!-- editable code block is below -->
-<pre id="codeeditor" class="no-outline line-numbers shadow--2dp"data-start="1"><code class="language-markdown editor no-outline" id="container" contenteditable="plaintext-only">[//]: # (Edit what you want but not this line. Create your own markdown prototype if you really want to.)
+<pre id="codeeditor" class="no-outline line-numbers shadow--2dp"data-start="1" contenteditable="plaintext-only"><code class="language-markdown editor no-outline" id="container">[//]: # (Edit what you want but not this line. Create your own markdown prototype if you really want to.)
 # welcome
 ## about
 This is the Prism.js Integrated Editor 2.00.011.
@@ -94,11 +94,11 @@ btw, click the `<>` button to start editing.
               position: index
           };
       }
-      var code = document.getElementsByTagName('code')[0];
-      
+      var code = document.getElementById('codeeditor');
+      codeeditor
       code.addEventListener('input',function () {
         var restore = saveCaretPosition(this);
-        Prism.highlightElement(this);
+        Prism.highlightElement(document.getElementsByTagName('code')[0]);
         restore();
       })
       
